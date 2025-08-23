@@ -1,22 +1,25 @@
 #include "test.h"
 #include "repo.h"
-#include "service.h"
 #include "rentalcart.h"
-#include "ui.h"
+#include "service.h"
+#include "gui.h"
+#include <QApplication>
 #include <iostream>
 
-void run() {
-    Tests tests;
-    tests.run();
-    cout << "Teste trecute!";
-    Repo repo("books.in");
+using std::cout;
+
+int main(int argc, char* argv[])
+{
+    Tests().run();
+    cout << "Teste rulate";
+
+    Repo repo{ "carti.txt" };
     Rentalcart cart;
     Service service{ repo, cart };
-    UI ui{ service };
-    ui.run();
-}
 
-int main() {
-    run();
-    return 0;
+    QApplication app(argc, argv);
+    ShopGUI gui{ service };
+    gui.show();
+
+    return app.exec();
 }
