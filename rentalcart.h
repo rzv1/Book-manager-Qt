@@ -12,7 +12,7 @@ using std::vector;
 
 class Rentalcart {
 private:
-    vector<Carte> books;
+    vector<Book> books;
     size_t size;
 
     std::string chars = "abcdefghijklmnopqrstuvwxyz";
@@ -25,15 +25,15 @@ public:
     Rentalcart() : gen(std::random_device{}()), size{ 0 } {}
 
     bool clear_cart();
-    bool add_cart(vector<Carte>& carti);
+    bool add_cart(const vector<Book>& carti);
     bool generate_cart(int n);
-    bool export_cart(string filename);
+    bool export_cart(const string& filename) const;
 
-    vector<Carte>& get_all() {
+    vector<Book>& get_all() {
         return books;
     }
 
-    size_t get_size() const{
+    [[nodiscard]] size_t get_size() const{
         return size;
     }
 };

@@ -7,97 +7,97 @@
 
 
 static void test_get_title() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	assert(c.get_title() == "A");
 
-	Carte c2{ "D", "E", "drama", 2000 };
+	Book c2{ "D", "E", "drama", 2000 };
 	assert(c2.get_title() == "D");
 
-	Carte c3{ "G", "H", "comedie", 2000 };
+	Book c3{ "G", "H", "comedie", 2000 };
 	assert(c3.get_title() == "G");
 }
 
 static void test_get_author() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	assert(c.get_author() == "B");
-	Carte c2{ "D", "E", "drama", 2000 };
+	Book c2{ "D", "E", "drama", 2000 };
 	assert(c2.get_author() == "E");
-	Carte c3{ "G", "H", "comedie", 2000 };
+	Book c3{ "G", "H", "comedie", 2000 };
 	assert(c3.get_author() == "H");
 }
 
 static void test_get_genre() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	assert(c.get_genre() == "istorie");
-	Carte c2{ "D", "E", "drama", 2000 };
+	Book c2{ "D", "E", "drama", 2000 };
 	assert(c2.get_genre() == "drama");
-	Carte c3{ "G", "H", "comedie", 2000 };
+	Book c3{ "G", "H", "comedie", 2000 };
 	assert(c3.get_genre() == "comedie");
 }
 
 static void test_get_year() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	assert(c.get_year() == 2000);
-	Carte c2{ "D", "E", "drama", 2001 };
+	Book c2{ "D", "E", "drama", 2001 };
 	assert(c2.get_year() == 2001);
-	Carte c3{ "G", "H", "comedie", 2002 };
+	Book c3{ "G", "H", "comedie", 2002 };
 	assert(c3.get_year() == 2002);
 }
 
 static void test_get_id() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	assert(c.get_id() == 0);
 }
 
 static void test_set_title() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	c.set_title("D");
 	assert(c.get_title() == "D");
-	Carte c1{ "E", "F", "drama", 2000 };
+	Book c1{ "E", "F", "drama", 2000 };
 	c1.set_title("H");
 	assert(c1.get_title() == "H");
 }
 
 static void test_set_author() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	c.set_author("D");
 	assert(c.get_author() == "D");
-	Carte c1{ "E", "F", "drama", 2000 };
+	Book c1{ "E", "F", "drama", 2000 };
 	c1.set_author("H");
 	assert(c1.get_author() == "H");
 }
 
 static void test_set_genre() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	c.set_genre("drama");
 	assert(c.get_genre() == "drama");
-	Carte c1{ "E", "F", "comedie", 2000 };
+	Book c1{ "E", "F", "comedie", 2000 };
 	c1.set_genre("istorie");
 	assert(c1.get_genre() == "istorie");
 }
 
 static void test_set_year() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	c.set_year(2001);
 	assert(c.get_year() == 2001);
-	Carte c1{ "E", "F", "drama", 2000 };
+	Book c1{ "E", "F", "drama", 2000 };
 	c1.set_year(2001);
 	assert(c1.get_year() == 2001);
 }
 
 static void test_set_id() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	c.set_id(1);
 	assert(c.get_id() == 1);
-	Carte c1{ "E", "F", "drama", 2000 };
+	Book c1{ "E", "F", "drama", 2000 };
 	c1.set_id(2);
 	assert(c1.get_id() == 2);
 }
 
 static void test_to_string() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	assert(c.to_string() == "ID: 0 Titlu: A Autor: B Gen: istorie An aparitie: 2000");
-	Carte c1{ "E", "F", "drama", 2000 };
+	Book c1{ "E", "F", "drama", 2000 };
 	assert(c1.to_string() == "ID: 0 Titlu: E Autor: F Gen: drama An aparitie: 2000");
 }
 
@@ -117,13 +117,13 @@ void Tests::run_test_domain() {
 
 static void test_add() {
 	Repo r("testfile");
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_size() == 1);
-	Carte c2{ "D", "E", "drama", 2000 };
+	Book c2{ "D", "E", "drama", 2000 };
 	r.add(c2);
 	assert(r.get_size() == 2);
-	Carte c3{ "G", "H", "comedie", 2000 };
+	Book c3{ "G", "H", "comedie", 2000 };
 	r.add(c3);
 	assert(r.get_size() == 3);
 	r.remove(1);
@@ -133,15 +133,15 @@ static void test_add() {
 
 static void test_remove() {
 	Repo r("testfile");
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_size() == 1);
-	Carte c1{ "E", "F", "drama", 2000 };
+	Book c1{ "E", "F", "drama", 2000 };
 	r.add(c1);
 	assert(r.get_size() == 2);
 	r.remove(1);
 	assert(r.get_size() == 1);
-	Carte c2{ "D", "E", "drama", 2000 };
+	Book c2{ "D", "E", "drama", 2000 };
 	r.add(c2);
 	assert(r.get_size() == 2);
 	r.remove(2);
@@ -158,7 +158,7 @@ static void test_remove() {
 
 static void test_update_title() {
 	Repo r("testfile");
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_title() == "A");
 	r.update_title(1, "D");
@@ -168,7 +168,7 @@ static void test_update_title() {
 
 static void test_update_author() {
 	Repo r("testfile");
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_author() == "B");
 	r.update_author(1, "D");
@@ -178,7 +178,7 @@ static void test_update_author() {
 
 static void test_update_genre() {
 	Repo r("testfile");
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_genre() == "istorie");
 	r.update_genre(1, "drama");
@@ -188,7 +188,7 @@ static void test_update_genre() {
 
 static void test_update_year() {
 	Repo r("testfile");
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_year() == 2000);
 	r.update_year(1, 2001);
@@ -198,7 +198,7 @@ static void test_update_year() {
 
 static void test_get_by_id() {
 	Repo r("testfile");
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_title() == "A");
 	assert(r.get_by_id(1).get_author() == "B");
@@ -242,8 +242,8 @@ static void test_add_service() {
 			s.add("J", "1321", "istorie", 2000);
 			assert(false);
 		}
-		catch (ValidationException& e) {
-			assert(e.get_message() == "Autor invalid!");
+		catch (ValidationException& ex) {
+			assert(ex.get_message() == "Autor invalid!");
 		}
 	}
 	r.remove(1);
@@ -257,7 +257,7 @@ static void test_remove_service() {
 	s.add("A", "B", "istorie", 2000);
 	assert(s.get_all().size() == 1);
 	s.remove(1);
-	assert(s.get_all().size() == 0);
+	assert(s.get_all().empty());
 }
 
 static void test_update_service() {
@@ -290,7 +290,7 @@ static void test_filter_title() {
 	s.add("G", "H", "comedie", 2002);
 	assert(s.filter_title("A").size() == 1);
 	assert(s.filter_title("D").size() == 1);
-	assert(s.filter_title("O").size() == 0);
+	assert(s.filter_title("O").empty());
 	r.remove(1);
 	r.remove(2);
 	r.remove(3);
@@ -305,9 +305,9 @@ static void test_filter_year() {
 	s.add("G", "H", "comedie", 2002);
 	assert(s.filter_year(2000).size() == 1);
 	assert(s.filter_year(2001).size() == 1);
-	assert(s.filter_year(2003).size() == 0);
+	assert(s.filter_year(2003).empty());
 	s.undo();
-	assert(s.filter_year(2002).size() == 0);
+	assert(s.filter_year(2002).empty());
 	r.remove(1);
 	r.remove(2);
 }
@@ -435,7 +435,7 @@ void Tests::run_test_service() {
 
 static void test_validate_book() {
 	try {
-		Carte c{ "A", "B", "invalid_genre", 2000 };
+		Book c{ "A", "B", "invalid_genre", 2000 };
 		c.validate_book();
 		assert(false);
 	}
@@ -443,7 +443,7 @@ static void test_validate_book() {
 		assert(e.get_message() == "Gen invalid!");
 	}
 	try {
-		Carte c{ "A", "invalid_312author", "istorie", 2000 };
+		Book c{ "A", "invalid_312author", "istorie", 2000 };
 		c.validate_book();
 		assert(false);
 	}
@@ -453,7 +453,7 @@ static void test_validate_book() {
 }
 
 static void test_validate_author() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	assert(c.validate_author("B") == true);
 	try {
 		c.validate_author("invalid_au312thor");
@@ -465,7 +465,7 @@ static void test_validate_author() {
 }
 
 static void test_validate_genre() {
-	Carte c{ "A", "B", "istorie", 2000 };
+	Book c{ "A", "B", "istorie", 2000 };
 	assert(c.validate_genre("istorie") == true);
 	try {
 		c.validate_genre("invalid_genre");

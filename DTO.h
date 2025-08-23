@@ -5,8 +5,10 @@
 #ifndef DTO_H
 #define DTO_H
 #include <string>
+#include <utility>
 
 using std::string;
+using std::move;
 
 class DTO
 {
@@ -14,12 +16,12 @@ private:
     string type;
     int freq;
 public:
-    DTO(const string& type) : type{ type }, freq{ 1 } {}
+    explicit DTO(string  type) : type{std::move( type )}, freq{ 1 } {}
     ~DTO() = default;
     void increment() {
         freq++;
     }
-    int get_freq() const {
+    [[nodiscard]] int get_freq() const {
         return freq;
     }
 };

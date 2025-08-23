@@ -78,8 +78,8 @@ void UI::print_menu_rental_cart() {
 /*
 Functia printeaza toate cartile
 */
-bool UI::print_all(const vector<Carte>& carti) {
-	if (carti.size() == 0) {
+bool UI::print_all(const vector<Book>& carti) {
+	if (carti.empty()) {
 		printf("Nu exista carti in lista!\n");
 		return false;
 	}
@@ -88,7 +88,7 @@ bool UI::print_all(const vector<Carte>& carti) {
 	return true;
 }
 
-void UI::print_report() {
+void UI::print_report() const {
 	service.clear_map();
 	service.add_to_map();
 	map<string, DTO> raport = service.get_map();
@@ -257,7 +257,7 @@ void UI::add_cart() {
 	string title = read_string("Titlu: ");
 	bool ret = service.add_cart(title);
 	if(ret)
-	printf("Carte adaugata cu succes!\n");
+	printf("Book adaugata cu succes!\n");
 }
 
 /*
@@ -267,7 +267,7 @@ void UI::generate_cart() {
 	int n = read_int("Numar de generari: ");
 	bool ret = service.generate_cart(n);
 	if(ret)
-	printf("Carte generata cu succes!");
+	printf("Book generata cu succes!");
 }
 
 /*

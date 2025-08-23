@@ -6,23 +6,25 @@
 #define DOMAIN_H
 #include <string>
 #include <iostream>
+#include <utility>
 using std::string;
+using std::move;
 
 // Clasa ValidationException este folosita pentru a arunca exceptii in cazul in care datele introduse nu sunt valide
 class ValidationException {
 private:
     string message;
 public:
-    ValidationException(string message) : message{ message } {}
-    const string get_message() const {
+    explicit ValidationException(string message) : message{ std::move(message) } {}
+    [[nodiscard]] string get_message() const {
         return this->message;
     }
     bool operator==(const string& ot) const {
         return message == ot;
     }
 };
-// Clasa Carte reprezinta o carte cu titlu, autor, gen, an de publicare si id
-class Carte {
+// Clasa Book reprezinta o carte cu titlu, autor, gen, an de publicare si id
+class Book {
 private:
     string title;
     string author;
@@ -31,30 +33,30 @@ private:
     int id;
 public:
     //Constructor cu parametrii
-    Carte(const string& title, const string& author, const string& genre, int year) : title{ title }, author{ author }, genre{ genre }, year{ year }, id{ 0 } {
+    Book(string  title, string  author, string genre, const int year) : title{std::move( title )}, author{std::move( author )}, genre{ std::move( genre ) }, year{ year }, id{ 0 } {
         to_lower_genre();
     }
     //Copiator
-    Carte(const Carte& other) : title{ other.title }, author{ other.author }, genre{ other.genre }, year{ other.year }, id{ other.id } {
-        std::cout << "Carte " << other.get_title() << " copiata!\n";
+    Book(const Book& other) : title{ other.title }, author{ other.author }, genre{ other.genre }, year{ other.year }, id{ other.id } {
+        //std::cout << "Book " << other.get_title() << " copiata!\n";
     }
     //Constructor default
-    ~Carte() = default;
+    ~Book() = default;
 
     // Getters si Setters pentru a accesa si modifica datele private ale cartii
-    string get_title() const {
+    [[nodiscard]] string get_title() const {
         return title;
     }
-    string get_author() const {
+    [[nodiscard]] string get_author() const {
         return author;
     }
-    string get_genre() const {
+    [[nodiscard]] string get_genre() const {
         return genre;
     }
-    int get_year() const {
+    [[nodiscard]] int get_year() const {
         return year;
     }
-    int get_id() const {
+    [[nodiscard]] int get_id() const {
         return id;
     }
 
@@ -75,12 +77,13 @@ public:
     }
 
     // Functii de validare a datelor introduse
-    bool validate_author(const string& author) const;
-    bool validate_genre(const string& genre) const;
+    static bool validate_author(const string& author) ;
+
+    static bool validate_genre(const string& genre);
     bool validate_book() const;
     void to_lower_genre();
 
     // Functie de printare a datelor
-    string to_string() const;
+    [[nodiscard]] string to_string() const;
 };
 #endif //DOMAIN_H

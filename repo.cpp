@@ -13,24 +13,24 @@ void Repo::read_file() {
     int year;
     string title, author, genre;
     while (f >> title >> author >> genre >> year) {
-        Carte c(title, author, genre, year);
+        Book c(title, author, genre, year);
         add(c);
     }
 }
 
-void Repo::write_file() {
+void Repo::write_file() const {
     ofstream f(filepath);
     for (const auto& book : books) {
         f << book.get_title() << " " << book.get_author() << " " << book.get_genre() << " " << book.get_year() << "\n";
     }
 }
 
-void Repo::add(Carte& book) {
+void Repo::add(Book& book) {
     book.set_id(next_id++);
     books.push_back(book);
 }
 
-void Repo::remove(int id) {
+void Repo::remove(const int id) {
     bool gasit = false;
     for (size_t i = 0; i < books.size() && !gasit; i++) {
         if (books[i].get_id() == id) {
@@ -42,32 +42,32 @@ void Repo::remove(int id) {
         throw RepoException("Cartea cu id-ul dat nu exista!");
 }
 
-//void Repo::update_by_parameter(Carte& book, void(Carte::* setter)(const string&), const string& parameter) const {
+//void Repo::update_by_parameter(Book& book, void(Book::* setter)(const string&), const string& parameter) const {
 //	if (parameter.empty())
 //		throw RepoException("Parametrul dat este invalid!");
 //	(book.*setter)(parameter);
 //}
 
-void Repo::update_title(int id, const string& title) {
-    Carte& c = get_by_id(id);
+void Repo::update_title(const int id, const string& title) {
+    Book& c = get_by_id(id);
     c.set_title(title);
 }
-void Repo::update_author(int id, const string& author) {
-    Carte& c = get_by_id(id);
-    c.validate_author(author);
+void Repo::update_author(const int id, const string& author) {
+    Book& c = get_by_id(id);
+    Book::validate_author(author);
     c.set_author(author);
 }
-void Repo::update_genre(int id, const string& genre) {
-    Carte& c = get_by_id(id);
-    c.validate_genre(genre);
+void Repo::update_genre(const int id, const string& genre) {
+    Book& c = get_by_id(id);
+    Book::validate_genre(genre);
     c.set_genre(genre);
 }
-void Repo::update_year(int id, const int year) {
-    Carte& c = get_by_id(id);
+void Repo::update_year(const int id, const int year) {
+    Book& c = get_by_id(id);
     c.set_year(year);
 }
 
-Carte& Repo::get_by_id(int id) {
+Book& Repo::get_by_id(const int id) {
     for (auto& carte : books)
         if (carte.get_id() == id)
             return carte;

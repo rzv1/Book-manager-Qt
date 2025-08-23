@@ -30,7 +30,7 @@ class UndoAdauga final : public ActiuneUndo {
 	Repo& repo;
 	int id;
 public:
-	UndoAdauga(Repo& r, int idCarteNoua) : repo{ r }, id{ idCarteNoua } {}
+	UndoAdauga(Repo& r, const int idCarteNoua) : repo{ r }, id{ idCarteNoua } {}
 	void doUndo() override {
 		repo.remove(id);
 	}
@@ -38,9 +38,9 @@ public:
 
 class UndoSterge final : public ActiuneUndo {
 	Repo& repo;
-	Carte carteStearsa;
+	Book carteStearsa;
 public:
-	UndoSterge(Repo& r, const Carte& c) : repo{ r }, carteStearsa{ c } {}
+	UndoSterge(Repo& r, const Book& c) : repo{ r }, carteStearsa{ c } {}
 	void doUndo() override {
 		repo.add(carteStearsa);
 	}
@@ -48,9 +48,9 @@ public:
 
 class UndoModifica final : public ActiuneUndo {
 	Repo& repo;
-	Carte carteVeche;
+	Book carteVeche;
 public:
-	UndoModifica(Repo& r, const Carte& inainte) : repo{ r }, carteVeche{ inainte } {}
+	UndoModifica(Repo& r, const Book& inainte) : repo{ r }, carteVeche{ inainte } {}
 	void doUndo() override {
 		repo.update_title(carteVeche.get_id(), carteVeche.get_title());
 		repo.update_author(carteVeche.get_id(), carteVeche.get_author());
@@ -73,14 +73,14 @@ public:
 	void add(const string& title, const string& author, const string& genre, const int year);
 	void remove(int id);
 	void update_title(int id, const string& title);
-	void update_author(int id, const string& author);
-	void update_genre(int id, const string& genre);
-	void update_year(int id, const int year);
-	vector<Carte> filter_title(const string& title) const;
-	vector<Carte> filter_year(const int year) const;
-	vector<Carte> sort_title() const;
-	vector<Carte> sort_author() const;
-	vector<Carte> sort_year_and_genre() const;
+	void update_author(int id, const string& author) const;
+	void update_genre(int id, const string& genre) const;
+	void update_year(int id, int year) const;
+	[[nodiscard]] vector<Book> filter_title(const string& title) const;
+	[[nodiscard]] vector<Book> filter_year(int year) const;
+	[[nodiscard]] vector<Book> sort_title() const;
+	[[nodiscard]] vector<Book> sort_author() const;
+	[[nodiscard]] vector<Book> sort_year_and_genre() const;
 
 	void undo();
 
@@ -101,20 +101,20 @@ public:
 		type_pairs.clear();
 	}
 
-	map<string, DTO> get_map() const {
+	[[nodiscard]] map<string, DTO> get_map() const {
 		return type_pairs;
 	}
 
-	Rentalcart& get_cart() {
+	[[nodiscard]] Rentalcart& get_cart() const {
 		return cart;
 	}
-	bool clear_cart();
-	bool add_cart(string& title);
-	bool generate_cart(int n);
-	bool export_cart(string& filename);
-	vector<Carte>& cart_get_all();
+	bool clear_cart() const;
+	bool add_cart(const string& title) const;
+	bool generate_cart(int n) const;
+	bool export_cart(const string& filename) const;
+	vector<Book>& cart_get_all() const;
 
-	const vector<Carte>& get_all() const {
+	const vector<Book>& get_all() const {
 		return repo.get_all();
 	}
 };

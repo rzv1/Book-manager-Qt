@@ -6,10 +6,10 @@
 #define TEST_H
 class Tests{
 private:
-    void run_test_domain();
-    void run_test_repo();
-    void run_test_service();
-    void run_test_validation();
+    static void run_test_domain();
+    static void run_test_repo();
+    static void run_test_service();
+    static void run_test_validation();
 public:
     void run();
 };

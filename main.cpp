@@ -9,9 +9,14 @@ void run() {
     Tests tests;
     tests.run();
     cout << "Teste trecute!";
-    Repo repo("books");
+    Repo repo("books.in");
     Rentalcart cart;
     Service service{ repo, cart };
     UI ui{ service };
     ui.run();
+}
+
+int main() {
+    run();
+    return 0;
 }

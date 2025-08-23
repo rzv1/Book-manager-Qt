@@ -18,18 +18,18 @@ class UI {
 private:
     Service& service;
 public:
-    UI(Service& service) : service{ service } {};
+    explicit UI(Service& service) : service{ service } {};
 
-    void print_menu();
-    void print_menu_update_option();
-    void print_menu_filter_option();
-    void print_menu_sort_option();
-    void print_menu_rental_cart();
-    bool print_all(const vector<Carte>& carti);
-    void print_report();
+    static void print_menu();
+    static void print_menu_update_option();
+    static void print_menu_filter_option();
+    static void print_menu_sort_option();
+    static void print_menu_rental_cart();
+    static bool print_all(const vector<Book>& carti);
+    void print_report() const;
 
-    string read_string(const string& prompt);
-    int read_int(const string& prompt);
+    static string read_string(const string& prompt);
+    static int read_int(const string& prompt);
 
     void run();
 
@@ -50,7 +50,7 @@ public:
     void export_cart();
     void undo();
 
-    void invalid();
-    void improved_visuals();
+    static void invalid();
+    static void improved_visuals();
 };
 #endif //UI_H

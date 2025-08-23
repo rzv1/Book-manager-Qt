@@ -5,24 +5,23 @@
 #include "domain.h"
 #include <vector>
 #include <string>
-#include <cctype>
 
 using std::vector;
 using std::string;
 
-void Carte::to_lower_genre() {
+void Book::to_lower_genre() {
     for (auto& c : genre)
         c = static_cast<char>(tolower(static_cast<unsigned char>(c)));
 }
 
-bool Carte::validate_author(const string& new_author) const {
+bool Book::validate_author(const string& new_author) {
     for (auto c : new_author)
         if (isdigit(c))
             throw ValidationException("Autor invalid!");
     return true;
 }
 
-bool Carte::validate_genre(const string& new_genre) const {
+bool Book::validate_genre(const string& new_genre) {
     vector<string> list = { "drama", "comedie", "istorie", "fictiune" };
     bool gasit = false;
     for (auto& word : list)
@@ -33,11 +32,11 @@ bool Carte::validate_genre(const string& new_genre) const {
     return true;
 }
 
-bool Carte::validate_book() const {
-    return validate_author(author) && validate_genre(genre);
+bool Book::validate_book() const {
+    return validate_genre(genre) && validate_author(author);
 }
 
-string Carte::to_string() const {
+string Book::to_string() const {
     return "ID: " + std::to_string(id) +
         " Titlu: " + title +
         " Autor: " + author +
