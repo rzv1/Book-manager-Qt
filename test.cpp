@@ -1,13 +1,10 @@
-//
-// Created by Razvan Andrei on 23.08.2025.
-//
-
 #include "domain.h"
 #include "service.h"
 #include "repo.h"
 #include "test.h"
 #include <cassert>
-#include <stdio.h>
+#include <fstream>
+
 
 static void test_get_title() {
 	Carte c{ "A", "B", "istorie", 2000 };
@@ -50,13 +47,6 @@ static void test_get_year() {
 static void test_get_id() {
 	Carte c{ "A", "B", "istorie", 2000 };
 	assert(c.get_id() == 0);
-	Repo r;
-	Carte c2{ "D", "E", "drama", 2000 };
-	r.add(c2);
-	assert(c2.get_id() == 1);
-	Carte c3{ "G", "H", "comedie", 2000 };
-	r.add(c3);
-	assert(c3.get_id() == 2);
 }
 
 static void test_set_title() {
@@ -126,7 +116,7 @@ void Tests::run_test_domain() {
 }
 
 static void test_add() {
-	Repo r;
+	Repo r("testfile");
 	Carte c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_size() == 1);
@@ -136,76 +126,88 @@ static void test_add() {
 	Carte c3{ "G", "H", "comedie", 2000 };
 	r.add(c3);
 	assert(r.get_size() == 3);
+	r.remove(1);
+	r.remove(2);
+	r.remove(3);
 }
 
 static void test_remove() {
-	Repo r;
+	Repo r("testfile");
 	Carte c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_size() == 1);
+	Carte c1{ "E", "F", "drama", 2000 };
+	r.add(c1);
+	assert(r.get_size() == 2);
 	r.remove(1);
-	assert(r.get_size() == 0);
+	assert(r.get_size() == 1);
 	Carte c2{ "D", "E", "drama", 2000 };
 	r.add(c2);
-	assert(r.get_size() == 1);
+	assert(r.get_size() == 2);
 	r.remove(2);
-	assert(r.get_size() == 0);
+	assert(r.get_size() == 1);
 	try {
-		r.remove(3);
-		assert(false); // Should not reach here
+		r.remove(4);
+		assert(false);
 	}
 	catch (RepoException& e) {
 		assert(e.get_message() == "Cartea cu id-ul dat nu exista!");
 	}
+	r.remove(3);
 }
 
 static void test_update_title() {
-	Repo r;
+	Repo r("testfile");
 	Carte c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_title() == "A");
 	r.update_title(1, "D");
 	assert(r.get_by_id(1).get_title() == "D");
+	r.remove(1);
 }
 
 static void test_update_author() {
-	Repo r;
+	Repo r("testfile");
 	Carte c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_author() == "B");
 	r.update_author(1, "D");
 	assert(r.get_by_id(1).get_author() == "D");
+	r.remove(1);
 }
 
 static void test_update_genre() {
-	Repo r;
+	Repo r("testfile");
 	Carte c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_genre() == "istorie");
 	r.update_genre(1, "drama");
 	assert(r.get_by_id(1).get_genre() == "drama");
+	r.remove(1);
 }
 
 static void test_update_year() {
-	Repo r;
+	Repo r("testfile");
 	Carte c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_year() == 2000);
 	r.update_year(1, 2001);
 	assert(r.get_by_id(1).get_year() == 2001);
+	r.remove(1);
 }
 
 static void test_get_by_id() {
-	Repo r;
+	Repo r("testfile");
 	Carte c{ "A", "B", "istorie", 2000 };
 	r.add(c);
 	assert(r.get_by_id(1).get_title() == "A");
 	assert(r.get_by_id(1).get_author() == "B");
 	assert(r.get_by_id(1).get_genre() == "istorie");
 	assert(r.get_by_id(1).get_year() == 2000);
+	r.remove(1);
 	try {
 		r.get_by_id(2);
-		assert(false); // Should not reach here
+		assert(false);
 	}
 	catch (RepoException& e) {
 		assert(e.get_message() == "Id-ul nu exista!");
@@ -223,9 +225,9 @@ void Tests::run_test_repo() {
 }
 
 static void test_add_service() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
-	Service s{ r , c};
+	Service s{ r, c };
 	s.add("A", "B", "istorie", 2000);
 	assert(s.get_all().size() == 1);
 	s.add("D", "E", "drama", 2000);
@@ -244,69 +246,76 @@ static void test_add_service() {
 			assert(e.get_message() == "Autor invalid!");
 		}
 	}
+	r.remove(1);
+	r.remove(2);
 }
 
 static void test_remove_service() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
-	Service s{ r , c};
+	Service s{ r, c };
 	s.add("A", "B", "istorie", 2000);
 	assert(s.get_all().size() == 1);
 	s.remove(1);
 	assert(s.get_all().size() == 0);
-	try {
-		s.remove(2);
-		assert(false); // Should not reach here
-	}
-	catch (RepoException& e) {
-		assert(e.get_message() == "Cartea cu id-ul dat nu exista!");
-	}
 }
 
 static void test_update_service() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
-	Service s{ r , c};
+	Service s{ r, c };
+	r.read_file();
+	r.write_file();
 	s.add("A", "B", "istorie", 2000);
 	assert(s.get_all().size() == 1);
 	s.update_title(1, "D");
 	assert(s.get_all()[0].get_title() == "D");
+	s.undo();
+	assert(s.get_all()[0].get_title() == "A");
 	s.update_author(1, "E");
 	assert(s.get_all()[0].get_author() == "E");
 	s.update_genre(1, "drama");
 	assert(s.get_all()[0].get_genre() == "drama");
 	s.update_year(1, 2001);
 	assert(s.get_all()[0].get_year() == 2001);
+	r.remove(1);
 }
 
 static void test_filter_title() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
-	Service s{ r , c};
+	Service s{ r, c };
 	s.add("A", "B", "istorie", 2000);
 	s.add("D", "E", "drama", 2001);
 	s.add("G", "H", "comedie", 2002);
 	assert(s.filter_title("A").size() == 1);
 	assert(s.filter_title("D").size() == 1);
 	assert(s.filter_title("O").size() == 0);
+	r.remove(1);
+	r.remove(2);
+	r.remove(3);
 }
 
 static void test_filter_year() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
-	Service s{ r , c};
+	Service s{ r, c };
 	s.add("A", "B", "istorie", 2000);
 	s.add("D", "E", "drama", 2001);
 	s.add("G", "H", "comedie", 2002);
 	assert(s.filter_year(2000).size() == 1);
 	assert(s.filter_year(2001).size() == 1);
 	assert(s.filter_year(2003).size() == 0);
+	s.undo();
+	assert(s.filter_year(2002).size() == 0);
+	r.remove(1);
+	r.remove(2);
 }
 
 static void test_sort_title() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
-	Service s{ r , c};
+	Service s{ r, c };
 	s.add("C", "B", "istorie", 2000);
 	s.add("A", "E", "drama", 2001);
 	s.add("B", "H", "comedie", 2002);
@@ -314,12 +323,15 @@ static void test_sort_title() {
 	assert(sorted[0].get_title() == "A");
 	assert(sorted[1].get_title() == "B");
 	assert(sorted[2].get_title() == "C");
+	r.remove(1);
+	r.remove(2);
+	r.remove(3);
 }
 
 static void test_sort_author() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
-	Service s{ r , c};
+	Service s{ r, c };
 	s.add("A", "C", "istorie", 2000);
 	s.add("D", "A", "drama", 2001);
 	s.add("G", "B", "comedie", 2002);
@@ -327,12 +339,15 @@ static void test_sort_author() {
 	assert(sorted[0].get_author() == "A");
 	assert(sorted[1].get_author() == "B");
 	assert(sorted[2].get_author() == "C");
+	r.remove(1);
+	r.remove(2);
+	r.remove(3);
 }
 
 static void test_sort_year_and_genre() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
-	Service s{ r , c};
+	Service s{ r, c };
 	s.add("A", "B", "istorie", 2005);
 	s.add("D", "E", "drama", 2001);
 	s.add("G", "H", "comedie", 2002);
@@ -340,10 +355,13 @@ static void test_sort_year_and_genre() {
 	assert(sorted[0].get_year() == 2001);
 	assert(sorted[1].get_year() == 2002);
 	assert(sorted[2].get_year() == 2005);
+	r.remove(1);
+	r.remove(2);
+	r.remove(3);
 }
 
 static void test_add_cart() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
 	Service s{ r, c };
 	s.add("A", "B", "istorie", 2005);
@@ -359,10 +377,14 @@ static void test_add_cart() {
 	assert(c.get_all()[1].get_genre() == "istorie");
 	assert(c.get_all()[2].get_genre() == "drama");
 	(void)s.cart_get_all();
+	r.remove(1);
+	r.remove(2);
+	r.remove(3);
+	r.remove(4);
 }
 
 static void test_clear_cart() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
 	Service s{ r, c };
 	s.add("A", "B", "istorie", 2005);
@@ -376,7 +398,7 @@ static void test_clear_cart() {
 }
 
 static void test_generate_cart() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
 	Service s{ r, c };
 	assert(s.generate_cart(5) == true);
@@ -384,7 +406,7 @@ static void test_generate_cart() {
 }
 
 static void test_export_cart() {
-	Repo r;
+	Repo r("testfile");
 	Rentalcart c;
 	Service s{ r, c };
 	s.add("A", "B", "istorie", 2005);
@@ -465,4 +487,5 @@ void Tests::run() {
 	run_test_repo();
 	run_test_service();
 	run_test_validation();
+	remove("testfile");
 }

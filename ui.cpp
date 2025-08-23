@@ -3,10 +3,10 @@
 //
 
 #include "ui.h"
+#include "DTO.h"
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <stdio.h>
 #include <vector>
 
 using std::string;
@@ -27,8 +27,10 @@ void UI::print_menu() {
 	printf("4. Filtreaza\n");
 	printf("5. Sorteaza\n");
 	printf("6. Cos\n");
-	printf("7. Afiseaza\n");
-	printf("8. Exit\n");
+	printf("7. Raport\n");
+	printf("8. Afiseaza\n");
+	printf("9. Undo\n");
+	printf("10. Exit\n");
 }
 
 /*
@@ -84,6 +86,15 @@ bool UI::print_all(const vector<Carte>& carti) {
 	for (const auto& carte : carti)
 		printf("%s\n", carte.to_string().c_str());
 	return true;
+}
+
+void UI::print_report() {
+	service.clear_map();
+	service.add_to_map();
+	map<string, DTO> raport = service.get_map();
+	for (const auto& element : raport) {
+		printf("%s => %d\n", element.first.c_str(), element.second.get_freq());
+	}
 }
 
 /*
@@ -336,8 +347,10 @@ void UI::run() {
 				case 4: export_cart(); break;
 				case 5: (void)print_all(service.cart_get_all()); break;
 				} break;
-			case 7: (void)print_all(service.get_all()); break;
-			case 8: return;
+			case 7: print_report(); break;
+			case 8: (void)print_all(service.get_all()); break;
+			case 9: undo(); break;
+			case 10: return;
 			}
 		}
 		catch (RepoException& e) {
@@ -346,5 +359,15 @@ void UI::run() {
 		catch (ValidationException& e) {
 			printf("%s\n\n", e.get_message().c_str());
 		}
+	}
+}
+
+void UI::undo() {
+	try {
+		service.undo();
+		printf("Ultima actiune a fost anulata!\n");
+	}
+	catch (const std::runtime_error& e) {
+		printf("%s\n\n", e.what());
 	}
 }

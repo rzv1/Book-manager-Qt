@@ -16,9 +16,9 @@ using std::cout;
 
 class UI {
 private:
-    Service service;
+    Service& service;
 public:
-    UI(Service service) : service{ service } {};
+    UI(Service& service) : service{ service } {};
 
     void print_menu();
     void print_menu_update_option();
@@ -26,6 +26,7 @@ public:
     void print_menu_sort_option();
     void print_menu_rental_cart();
     bool print_all(const vector<Carte>& carti);
+    void print_report();
 
     string read_string(const string& prompt);
     int read_int(const string& prompt);
@@ -47,6 +48,7 @@ public:
     void add_cart();
     void generate_cart();
     void export_cart();
+    void undo();
 
     void invalid();
     void improved_visuals();

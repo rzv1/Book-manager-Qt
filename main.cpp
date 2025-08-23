@@ -5,14 +5,13 @@
 #include "ui.h"
 #include <iostream>
 
-int main() {
+void run() {
     Tests tests;
     tests.run();
-    printf("All tests passed!\n");
-    Repo repo;
+    cout << "Teste trecute!";
+    Repo repo("books");
     Rentalcart cart;
-    Service service{ repo, cart};
+    Service service{ repo, cart };
     UI ui{ service };
     ui.run();
-    return 0;
 }

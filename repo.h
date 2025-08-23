@@ -23,8 +23,11 @@ class Repo {
 private:
     vector<Carte> books;
     int next_id;
+    string filepath;
 public:
-    Repo() : next_id{ 1 } {}
+    Repo(string filepath) : next_id{ 1 }, filepath{ filepath } {
+        read_file();
+    }
 
     ~Repo() = default;
 
@@ -37,6 +40,8 @@ public:
     void update_author(int id, const string& author);
     void update_genre(int id, const string& genre);
     void update_year(int id, const int year);
+    void read_file();
+    void write_file();
 
     Carte& get_by_id(int id);
 

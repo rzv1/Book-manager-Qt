@@ -3,6 +3,27 @@
 //
 
 #include "repo.h"
+#include <fstream>
+
+using std::ifstream;
+using std::ofstream;
+
+void Repo::read_file() {
+    ifstream f(filepath);
+    int year;
+    string title, author, genre;
+    while (f >> title >> author >> genre >> year) {
+        Carte c(title, author, genre, year);
+        add(c);
+    }
+}
+
+void Repo::write_file() {
+    ofstream f(filepath);
+    for (const auto& book : books) {
+        f << book.get_title() << " " << book.get_author() << " " << book.get_genre() << " " << book.get_year() << "\n";
+    }
+}
 
 void Repo::add(Carte& book) {
     book.set_id(next_id++);
