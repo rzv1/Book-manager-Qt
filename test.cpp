@@ -224,7 +224,8 @@ void Tests::run_test_repo() {
 
 static void test_add_service() {
 	Repo r;
-	Service s{ r };
+	Rentalcart c;
+	Service s{ r , c};
 	s.add("A", "B", "istorie", 2000);
 	assert(s.get_all().size() == 1);
 	s.add("D", "E", "drama", 2000);
@@ -247,7 +248,8 @@ static void test_add_service() {
 
 static void test_remove_service() {
 	Repo r;
-	Service s{ r };
+	Rentalcart c;
+	Service s{ r , c};
 	s.add("A", "B", "istorie", 2000);
 	assert(s.get_all().size() == 1);
 	s.remove(1);
@@ -263,7 +265,8 @@ static void test_remove_service() {
 
 static void test_update_service() {
 	Repo r;
-	Service s{ r };
+	Rentalcart c;
+	Service s{ r , c};
 	s.add("A", "B", "istorie", 2000);
 	assert(s.get_all().size() == 1);
 	s.update_title(1, "D");
@@ -278,7 +281,8 @@ static void test_update_service() {
 
 static void test_filter_title() {
 	Repo r;
-	Service s{ r };
+	Rentalcart c;
+	Service s{ r , c};
 	s.add("A", "B", "istorie", 2000);
 	s.add("D", "E", "drama", 2001);
 	s.add("G", "H", "comedie", 2002);
@@ -289,7 +293,8 @@ static void test_filter_title() {
 
 static void test_filter_year() {
 	Repo r;
-	Service s{ r };
+	Rentalcart c;
+	Service s{ r , c};
 	s.add("A", "B", "istorie", 2000);
 	s.add("D", "E", "drama", 2001);
 	s.add("G", "H", "comedie", 2002);
@@ -300,7 +305,8 @@ static void test_filter_year() {
 
 static void test_sort_title() {
 	Repo r;
-	Service s{ r };
+	Rentalcart c;
+	Service s{ r , c};
 	s.add("C", "B", "istorie", 2000);
 	s.add("A", "E", "drama", 2001);
 	s.add("B", "H", "comedie", 2002);
@@ -312,7 +318,8 @@ static void test_sort_title() {
 
 static void test_sort_author() {
 	Repo r;
-	Service s{ r };
+	Rentalcart c;
+	Service s{ r , c};
 	s.add("A", "C", "istorie", 2000);
 	s.add("D", "A", "drama", 2001);
 	s.add("G", "B", "comedie", 2002);
@@ -324,7 +331,8 @@ static void test_sort_author() {
 
 static void test_sort_year_and_genre() {
 	Repo r;
-	Service s{ r };
+	Rentalcart c;
+	Service s{ r , c};
 	s.add("A", "B", "istorie", 2005);
 	s.add("D", "E", "drama", 2001);
 	s.add("G", "H", "comedie", 2002);
@@ -332,6 +340,60 @@ static void test_sort_year_and_genre() {
 	assert(sorted[0].get_year() == 2001);
 	assert(sorted[1].get_year() == 2002);
 	assert(sorted[2].get_year() == 2005);
+}
+
+static void test_add_cart() {
+	Repo r;
+	Rentalcart c;
+	Service s{ r, c };
+	s.add("A", "B", "istorie", 2005);
+	s.add("D", "E", "drama", 2001);
+	s.add("E", "H", "comedie", 2002);
+	string title = "A";
+	assert(s.add_cart(title) == true);
+	assert(c.get_size() == 1);
+	assert(c.get_all()[0].get_genre() == "istorie");
+	s.add("A", "C", "drama", 2010);
+	s.add_cart(title);
+	assert(c.get_all().size() == 3);
+	assert(c.get_all()[1].get_genre() == "istorie");
+	assert(c.get_all()[2].get_genre() == "drama");
+	(void)s.cart_get_all();
+}
+
+static void test_clear_cart() {
+	Repo r;
+	Rentalcart c;
+	Service s{ r, c };
+	s.add("A", "B", "istorie", 2005);
+	s.add("D", "E", "drama", 2001);
+	s.add("A", "H", "comedie", 2002);
+	string title = "A";
+	s.add_cart(title);
+	assert(c.get_all().size() == 2);
+	assert(s.clear_cart() == true);
+	assert(c.get_all().size() == 0);
+}
+
+static void test_generate_cart() {
+	Repo r;
+	Rentalcart c;
+	Service s{ r, c };
+	assert(s.generate_cart(5) == true);
+	assert(c.get_all().size() == 5);
+}
+
+static void test_export_cart() {
+	Repo r;
+	Rentalcart c;
+	Service s{ r, c };
+	s.add("A", "B", "istorie", 2005);
+	s.add("D", "E", "drama", 2001);
+	s.add("A", "H", "comedie", 2002);
+	string title = "A";
+	s.add_cart(title);
+	string filename = "test.csv";
+	assert(s.export_cart(filename) == true);
 }
 
 void Tests::run_test_service() {
@@ -343,6 +405,10 @@ void Tests::run_test_service() {
 	test_sort_title();
 	test_sort_author();
 	test_sort_year_and_genre();
+	test_add_cart();
+	test_clear_cart();
+	test_generate_cart();
+	test_export_cart();
 }
 
 static void test_validate_book() {

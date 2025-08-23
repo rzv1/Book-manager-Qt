@@ -6,14 +6,16 @@
 #define SERVICE_H
 #include "repo.h"
 #include "domain.h"
+#include "rentalcart.h"
 #include <string>
 using std::string;
 
 class Service {
 private:
     Repo repo;
+    Rentalcart& cart;
 public:
-    Service(Repo repo) : repo{ repo } {}
+    Service(Repo repo, Rentalcart& cart) : repo{ repo }, cart{cart} {}
 
     void add(const string& title, const string& author, const string& genre, const int year);
     void remove(int id);
@@ -30,5 +32,13 @@ public:
     const vector<Carte>& get_all() const {
         return repo.get_all();
     }
+    Rentalcart& get_cart() {
+        return cart;
+    }
+    bool clear_cart();
+    bool add_cart(string& title);
+    bool generate_cart(int n);
+    bool export_cart(string& filename);
+    vector<Carte>& cart_get_all();
 };
 #endif //SERVICE_H

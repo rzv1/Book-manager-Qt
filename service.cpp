@@ -83,3 +83,28 @@ vector<Carte> Service::sort_year_and_genre() {
 			}
 	return sorted;
 }
+
+bool Service::clear_cart() {
+	cart.clear_cart();
+	return true;
+}
+
+bool Service::add_cart(string& title) {
+	vector<Carte> filtered = filter_title(title);
+	cart.add_cart(filtered);
+	return true;
+}
+
+bool Service::generate_cart(int n) {
+	cart.generate_cart(n);
+	return true;
+}
+
+bool Service::export_cart(string& filename) {
+	cart.export_cart(filename);
+	return true;
+}
+
+vector<Carte>& Service::cart_get_all() {
+	return cart.get_all();
+}
