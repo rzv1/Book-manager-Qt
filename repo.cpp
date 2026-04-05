@@ -1,75 +1,131 @@
-//
-// Created by Razvan Andrei on 23.08.2025.
-//
-
 #include "repo.h"
+#include "domain.h"
+#include <iostream>
+#include <string>
+#include <algorithm>
 #include <fstream>
 
-using std::ifstream;
+using std::string;
 using std::ofstream;
+using std::ifstream;
+using std::find_if;
 
-void Repo::read_file() {
-    ifstream f(filepath);
-    int year;
-    string title, author, genre;
-    while (f >> title >> author >> genre >> year) {
-        Book c(title, author, genre, year);
-        add(c);
-    }
-}
-
-void Repo::write_file() const {
-    ofstream f(filepath);
-    for (const auto& book : books) {
-        f << book.get_title() << " " << book.get_author() << " " << book.get_genre() << " " << book.get_year() << "\n";
-    }
+/*
+Functie care adauga o carte validata in repo
+*/
+void RepoNormal::add(Carte& book) {
+	book.set_id(next_id++);
+	books.push_back(book);
+	write_file();
 }
 
-void Repo::add(Book& book) {
-    book.set_id(next_id++);
-    books.push_back(book);
+/*
+Functie care citeste din fisier
+*/
+void RepoProbabilitate::read_file() {
+	ifstream f(filepath);
+	int year;
+	string title, author, genre;
+	while (f >> title >> author >> genre >> year) {
+		Carte c(title, author, genre, year);
+		add(c);
+	}
 }
 
-void Repo::remove(const int id) {
-    bool gasit = false;
-    for (size_t i = 0; i < books.size() && !gasit; i++) {
-        if (books[i].get_id() == id) {
-            books.erase(books.begin() + i);
-            gasit = true;
-        }
-    }
-    if (!gasit)
-        throw RepoException("Cartea cu id-ul dat nu exista!");
+/*
+Functie care scrie in fisier
+*/
+void RepoProbabilitate::write_file() {
+	ofstream f(filepath);
+	for (const auto& carte : carti) {
+		Carte book = carte.second;
+		f << book.get_title() << " " << book.get_author() << " " << book.get_genre() << " " << book.get_year() << "\n";
+	}
 }
 
-//void Repo::update_by_parameter(Book& book, void(Book::* setter)(const string&), const string& parameter) const {
-//	if (parameter.empty())
-//		throw RepoException("Parametrul dat este invalid!");
-//	(book.*setter)(parameter);
-//}
-
-void Repo::update_title(const int id, const string& title) {
-    Book& c = get_by_id(id);
-    c.set_title(title);
-}
-void Repo::update_author(const int id, const string& author) {
-    Book& c = get_by_id(id);
-    Book::validate_author(author);
-    c.set_author(author);
-}
-void Repo::update_genre(const int id, const string& genre) {
-    Book& c = get_by_id(id);
-    Book::validate_genre(genre);
-    c.set_genre(genre);
-}
-void Repo::update_year(const int id, const int year) {
-    Book& c = get_by_id(id);
-    c.set_year(year);
+/*
+Functie care citeste din fisier
+*/
+void RepoNormal::read_file() {
+	ifstream f(filepath);
+	int year;
+	string title, author, genre;
+	while (f >> title >> author >> genre >> year) {
+		Carte c(title, author, genre, year);
+		add(c);
+	}
 }
 
-Book& Repo::get_by_id(const int id) {
-    for (auto& carte : books)
-        if (carte.get_id() == id)
-            return carte;
-    throw RepoException("Id-ul nu exista!");
+/*
+Functie care scrie in fisier
+*/
+void RepoNormal::write_file() {
+	ofstream f(filepath);
+	for (const auto& book : books) {
+		f << book.get_title() << " " << book.get_author() << " " << book.get_genre() << " " << book.get_year() << "\n";
+	}
+}
+
+/*
+Functia care sterge cartea cu id-ul dat din repo
+throw: Cartea cu ID nu exista in repo
+*/
+void RepoNormal::remove(int id) {
+	auto it = find_if(books.begin(), books.end(), [id](const Carte& carte) { return carte.get_id() == id; });
+	if (it != books.end()) {
+		books.erase(it);
+		write_file();
+	}
+	else
+	throw RepoException("Cartea cu id-ul dat nu exista!");
+}
+
+/*
+Functia actualizeaza titlul unei carti
+*/
+void RepoNormal::update_title(int id, const string& title) {
+	Carte& c = get_by_id(id);
+	c.set_title(title);
+	write_file();
+}
+
+/*
+Functia actualizeaza autorul unei carti\
+*/
+void RepoNormal::update_author(int id, const string& author) {
+	Carte& c = get_by_id(id);
+	c.validate_author(author);
+	c.set_author(author);
+	write_file();
+}
+
+/*
+Functia actualizeaza gen-ul unei carti
+*/
+void RepoNormal::update_genre(int id, const string& genre) {
+	Carte& c = get_by_id(id);
+	c.validate_genre(genre);
+	c.set_genre(genre);
+	write_file();
+}
+
+/*
+Functia actualizeaza anul unei carti
+*/
+void RepoNormal::update_year(int id, const int year) {
+	Carte& c = get_by_id(id);
+	c.set_year(year);
+	write_file();
+}
+
+/*
+Functia returneaza cartea cu id-ul dat
+throw: Cartea cu ID nu se afla in repo
+*/
+Carte& RepoNormal::get_by_id(int id) {
+	auto it = find_if(books.begin(), books.end(), [&](const Carte& carte) { return carte.get_id() == id; });
+	if (it != books.end())
+		return *it;
+	else
+		throw RepoException("Id-ul nu exista!");
 }

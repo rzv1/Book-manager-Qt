@@ -1,0 +1,5 @@
+/Users/rzv/source/OOP/POO_Lab10/CMakeFiles/app.dir
+/Users/rzv/source/OOP/POO_Lab10/CMakeFiles/edit_cache.dir
+/Users/rzv/source/OOP/POO_Lab10/CMakeFiles/rebuild_cache.dir
+/Users/rzv/source/OOP/POO_Lab10/CMakeFiles/app_autogen_timestamp_deps.dir
+/Users/rzv/source/OOP/POO_Lab10/CMakeFiles/app_autogen.dir

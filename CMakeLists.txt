@@ -11,15 +11,18 @@ find_package(Qt6 COMPONENTS Widgets Core Gui REQUIRED)
 
 add_executable(app main.cpp
         domain.cpp
-        repo.cpp service.cpp
+        domain.h
+        AbstractModel.h
+        Observer.h
+        repo.cpp
         rentalcart.cpp
         rentalcart.h
         repo.h
         service.cpp
         service.h
         DTO.h
-        test.cpp
-        test.h
+        tests.cpp
+        tests.h
         gui.h
 )
 target_link_libraries(app PRIVATE Qt6::Widgets Qt6::Core Qt6::Gui)

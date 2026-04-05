@@ -1,12 +1,8 @@
-//
-// Created by Razvan Andrei on 23.08.2025.
-//
-
 #include "ui.h"
-#include "DTO.h"
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <stdio.h>
 #include <vector>
 
 using std::string;
@@ -78,8 +74,8 @@ void UI::print_menu_rental_cart() {
 /*
 Functia printeaza toate cartile
 */
-bool UI::print_all(const vector<Book>& carti) {
-	if (carti.empty()) {
+bool UI::print_all(const vector<Carte>& carti) {
+	if (carti.size() == 0) {
 		printf("Nu exista carti in lista!\n");
 		return false;
 	}
@@ -88,7 +84,7 @@ bool UI::print_all(const vector<Book>& carti) {
 	return true;
 }
 
-void UI::print_report() const {
+void UI::print_report() {
 	service.clear_map();
 	service.add_to_map();
 	map<string, DTO> raport = service.get_map();
@@ -257,7 +253,7 @@ void UI::add_cart() {
 	string title = read_string("Titlu: ");
 	bool ret = service.add_cart(title);
 	if(ret)
-	printf("Book adaugata cu succes!\n");
+	printf("Carte adaugata cu succes!\n");
 }
 
 /*
@@ -267,7 +263,7 @@ void UI::generate_cart() {
 	int n = read_int("Numar de generari: ");
 	bool ret = service.generate_cart(n);
 	if(ret)
-	printf("Book generata cu succes!");
+	printf("Carte generata cu succes!");
 }
 
 /*
